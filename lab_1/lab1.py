@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.signal import argrelextrema
 
 T = 5 # Right border of the observed interval, [0, T]
 delta = 0.01 # Step
@@ -7,7 +8,7 @@ N = round(T / delta) + 1 # Amount of observations
 f_vals = [] # Input data observations that will be read from file
 freq = 1 / T
 hz = (N-1) * T / 100 # Frequency
-found_index = None
+local_max_index = None
 dot_space = np.linspace(0, T, num=N, endpoint=True) # List of points for observations
 
 def floor_zero(x):
@@ -18,7 +19,7 @@ def floor_zero(x):
 def main():
     '''Main function.'''
 
-    global f_vals, dot_space, freq, found_index
+    global f_vals, dot_space, freq, local_max_index
 
     # Read input observations from file
     with open("f18.txt", "r") as f:
@@ -42,16 +43,10 @@ def main():
     plt.plot(dot_space, list(map(floor_zero, fft_vals)), 'r--', label="Fourier transform of input data")
     plt.legend(loc="best")
 
-    # Finiding first local maxima's index, excluding the left border one
-    maxs = np.r_[True, fft_vals[1:] < fft_vals[:-1]] & np.r_[fft_vals[:-1] < fft_vals[1:], True]
-    maxs_ind = [int(x * 100 - 1) for x in [a*b for a,b in zip(maxs, dot_space)]]
+    # Finding first local max index
+    local_max_index = argrelextrema(fft_vals, np.greater)[0][0] - 1
 
-    for i in maxs_ind:
-        if i >= 0:
-            found_index = i + 1
-            break
-
-    ind_hz = int(found_index * freq)
+    ind_hz = int(local_max_index * freq)
     
     # y(t) = a1*t^3 + a2*t^2 + a3*t + a4*sin(2pi*ind_hz*t) + a5
     # Should be equal to observations in these points

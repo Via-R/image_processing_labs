@@ -8,6 +8,7 @@ N = round(T / delta) + 1 # Amount of observations
 f_vals = [] # Input data observations that will be read from file
 freq = 1 / T
 hz = (N-1) * T / 100 # Frequency
+
 local_max_index = None
 dot_space = np.linspace(0, T, num=N, endpoint=True) # List of points for observations
 
@@ -54,7 +55,7 @@ def main():
     syst = []
     for x in dot_space:
         chronos = []
-        chronos.append(x**3)
+        chronos.append(x**3)+
         chronos.append(x**2)
         chronos.append(x)
         chronos.append(np.sin(2*np.pi*ind_hz*x))
@@ -72,4 +73,4 @@ def main():
     plt.show()
 
 if __name__ == "__main__":
-    main()
+    main()4

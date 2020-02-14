@@ -46,6 +46,7 @@ def main():
 
     # Finding first local max index
     local_max_index = argrelextrema(fft_vals, np.greater)[0][0] - 1
+    print(local_max_index)
 
     ind_hz = int(local_max_index * freq)
     
@@ -55,7 +56,7 @@ def main():
     syst = []
     for x in dot_space:
         chronos = []
-        chronos.append(x**3)+
+        chronos.append(x**3)
         chronos.append(x**2)
         chronos.append(x)
         chronos.append(np.sin(2*np.pi*ind_hz*x))
@@ -73,4 +74,4 @@ def main():
     plt.show()
 
 if __name__ == "__main__":
-    main()4
+    main()
